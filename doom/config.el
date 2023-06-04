@@ -59,6 +59,12 @@
         (run-with-idle-timer flymake-posframe-delay nil #'flymake-posframe-display)))
 
 ;; maskray/lsp
+(defvar +my-use-eglot nil) ;; TODO: try eglot?
+(defun +maskray/toggle-eglot ()
+  (interactive)
+  (setq +my-use-eglot (not +my-use-eglot))
+  (message "use: %s" (if +my-use-eglot "eglot" "lsp-mode")))
+
 (setq lsp-keymap-prefix "M-q")
 (use-package! lsp-mode
   ;; :load-path "~/Dev/Emacs/lsp-mode"
