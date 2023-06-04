@@ -69,6 +69,7 @@
     (xref--show-xrefs
      (lambda () (mapcar #'lsp--symbol-information-to-xref symbols)) nil)))
 
+;;;###autoload
 (defun +maskray/avy-goto-definitions ()
   (interactive)
   (if lsp-mode
@@ -76,14 +77,17 @@
              (+maskray/find-definitions))
     (avy-goto-word-0 nil)))
 
+;;;###autoload
 (defun +maskray/avy-goto-symbol ()
   (interactive)
   (+maskray/avy-document-symbol nil))
 
+;;;###autoload
 (defun +maskray/avy-goto-references ()
   (interactive)
   (+maskray/avy-document-symbol '+maskray/find-references))
 
+;;;###autoload
 (defun +maskray/workspace-symbol-alt ()
   (interactive)
   (setq current-prefix-arg t)

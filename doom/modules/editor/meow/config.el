@@ -3,6 +3,10 @@
 ;; we need evil, but don't be evil
 (use-package! evil)
 
+;; commenter
+(use-package! evil-nerd-commenter
+  :commands (evilnc-comment-or-uncomment-lines))
+
 ;; meow save the world!
 (use-package! meow
   :after evil
@@ -78,6 +82,7 @@
    '("z." . evil-scroll-line-to-center-first-non-blank)
    '("zf" . evil-scroll-column-right)
    '("zb" . evil-scroll-column-left)
+   '("z/" . evilnc-comment-or-uncomment-line)
    ;; nav
    '("u" . evil-scroll-up)
    '("d" . evil-scroll-down)

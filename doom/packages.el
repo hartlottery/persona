@@ -10,3 +10,6 @@
            :files ("*.el" "*.py")))
 
 (package! org-download)
+
+(package! spinner)
+(package! eglot)
