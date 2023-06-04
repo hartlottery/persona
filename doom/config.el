@@ -1,6 +1,11 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+;; we need evil, but don't be evil
+(use-package! evil)
+
+;; meow save the world!
 (use-package! meow
+  :after evil
   :demand t
   :config
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
@@ -54,11 +59,17 @@
    '("f" . meow-next-symbol)
    '("F" . meow-next-word)
    '("C-S-f" . meow-right-expand)
+   '("u" . evil-scroll-up)
+   '("d" . evil-scroll-down)
+   ;; nav
+   '("h" . evil-jump-backward)
+   '("l" . evil-jump-forward)
    ;; jumps
    '("t" . meow-find)
    '("T" . meow-till)
-   '("/" . meow-visit)
-   '("s" . meow-search)
+   '("s" . meow-visit)
+   '("RET" . meow-search)
+   '("jj" . avy-goto-word-0)
    ;; marks
    '("m" . meow-mark-symbol)
    '("M" . meow-mark-word)
@@ -70,6 +81,8 @@
    '("G" . meow-grab)
    '("v" . meow-line)
    '("V" . meow-goto-line)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
    ;; edit+marks
    '("e" . meow-change)
    '("r" . meow-replace)
@@ -82,9 +95,11 @@
    '("A" . meow-open-below)
    '("i" . meow-insert)
    '("I" . meow-open-above)
-   '("u" . meow-undo)
-   '("U" . meow-undo-in-selection)
+   '("/" . meow-undo)
+   '("?" . undo-redo)
    '("q" . meow-pop-selection)
+   '("<" . evil-shift-left)
+   '(">" . evil-shift-right)
    ;; god-mode
    '("x" . "C-x")
    '("c" . "C-c")

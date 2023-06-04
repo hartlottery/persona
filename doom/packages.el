@@ -2,6 +2,7 @@
 ;;; $DOOMDIR/packages.el
 
 (package! meow)
+(package! evil)
 
 (package! pyim-basedict)
 
