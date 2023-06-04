@@ -122,7 +122,7 @@
                                          xref-find-references)))
 
 ;; which-key
-(setq which-key-delay-functions 0)
+(setq which-key-idle-delay 0)
 
 ;; which-func
 (use-package! which-func
