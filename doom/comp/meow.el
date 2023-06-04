@@ -18,8 +18,9 @@
   (map! :map meow-beacon-state-keymap
     doom-leader-key doom-leader-map)
 
-  ;; unmap C-x C-0 for keypad mode of x0; TODO: just prefix of C-x, do not inherit
+  ;; unmap for keypad mode; TODO: just prefix of C-x, do not inherit
   (map! "C-x C-0" nil)
+  (map! "C-x C-o" nil)
 
   ;; keys for motion
   (meow-motion-overwrite-define-key
@@ -28,6 +29,8 @@
    '("n" . meow-next)
    '("p" . meow-prev)
    '("f" . meow-right)
+   ;; nav
+   '("," . "C-x C-SPC")
    ;; god-mode
    '("x" . "C-x")
    '("C-x C-x" . "H-x") ;; xx to run the original x
@@ -49,27 +52,48 @@
    '("1" . meow-expand-1)
    '("-" . negative-argument)
    ;; move
-   '("b" . meow-back-symbol)
-   '("B" . meow-back-word)
-   '("C-S-b" . meow-left-expand)
+   '("h" . meow-back-symbol)
+   '("H" . meow-back-word)
+   '("b" . meow-left)
+   '("B" . meow-left-expand)
    '("n" . meow-next)
    '("N" . meow-next-expand)
    '("p" . meow-prev)
    '("P" . meow-prev-expand)
-   '("f" . meow-next-symbol)
-   '("F" . meow-next-word)
-   '("C-S-f" . meow-right-expand)
+   '("l" . meow-next-symbol)
+   '("L" . meow-next-word)
+   '("f" . meow-right)
+   '("F" . meow-right-expand)
+   ;; evil-z
+   '("zo" . evil-open-fold)
+   '("zO" . evil-open-fold-rec)
+   '("zc" . evil-close-fold)
+   '("za" . evil-toggle-fold)
+   '("zr" . evil-open-folds)
+   '("zm" . evil-close-folds)
+   '("z=" . ispell-word)
+   '("z RET" . evil-scroll-line-to-top-first-non-blank)
+   '("zz" . evil-scroll-line-to-center)
+   '("z." . evil-scroll-line-to-center-first-non-blank)
+   '("zf" . evil-scroll-column-right)
+   '("zb" . evil-scroll-column-left)
+   ;; nav
    '("u" . evil-scroll-up)
    '("d" . evil-scroll-down)
-   ;; nav
-   '("h" . evil-jump-backward)
-   '("l" . evil-jump-forward)
+   '("," . "C-x C-SPC")
+   '(".." . bookmark-jump)
+   '(".m" . bookmark-set)
+   '(".d" . bookmark-delete)
    ;; jumps
    '("t" . meow-find)
    '("T" . meow-till)
    '("s" . meow-visit)
+   '("S" . consult-line)
    '("RET" . meow-search)
    '("jj" . avy-goto-word-0)
+   '("jc" . avy-goto-char-timer)
+   '("jn" . evilem-motion-next-line)
+   '("jp" . evilem-motion-previous-line)
    ;; marks
    '("m" . meow-mark-symbol)
    '("M" . meow-mark-word)
@@ -90,7 +114,7 @@
    '("w" . meow-kill)
    '("W" . meow-save)
    '("y" . meow-yank)
-   '("Y" . meow-sync-grab)
+   '("Y" . meow-yank-pop)
    '("a" . meow-append)
    '("A" . meow-open-below)
    '("i" . meow-insert)
@@ -108,6 +132,21 @@
    '("'" . meow-reverse)
    '("\"" . repeat)
    '("<escape>" . ignore))
+
+  ;; prog-mode
+  (add-hook 'prog-mode-hook
+            (meow-normal-define-key
+             ;; jump
+             '(";" . +maskray/avy-goto-definitions)
+             '("j;" . +maskray/avy-goto-symbol)
+             '("jr" . +maskray/avy-goto-references)
+             '("jx" . +lookup/references-at-function)
+             '("ji" . lsp-ui-imenu)
+             '("jb" . lsp-ui-peek-jump-backward)
+             '("jf" . lsp-ui-peek-jump-forward)
+             '("ja" . +maskray/workspace-symbol)
+             '("jA" . +maskray/workspace-symbol-alt)
+             '("jF" . +maskray/ffap)))
 
   ;; meow!
   (meow-global-mode))
