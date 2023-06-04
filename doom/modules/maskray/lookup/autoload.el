@@ -1,5 +1,4 @@
 ;;; maskray/lookup/autoload.el -*- lexical-binding: t; -*-
-;; https://github.com/MaskRay/Config
 
 ;;;###autoload
 (defun +maskray/avy-document-symbol (all)
@@ -85,7 +84,8 @@
 ;;;###autoload
 (defun +maskray/avy-goto-references ()
   (interactive)
-  (+maskray/avy-document-symbol '+maskray/find-references))
+  (+maskray/avy-document-symbol t)
+  (+maskray/find-references))
 
 ;;;###autoload
 (defun +maskray/workspace-symbol-alt ()
