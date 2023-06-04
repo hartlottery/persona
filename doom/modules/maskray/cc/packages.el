@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; maskray/cc/packages.el
 
-(package! ccls :ignore t)
+(package! ccls)
 (package! clang-format)
 (package! cmake-mode :recipe (:host github :repo "emacsmirror/cmake-mode" :files (:defaults "*")))
 (package! llvm-mode :ignore t)
