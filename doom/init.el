@@ -54,6 +54,7 @@
        ;;zen               ; distraction-free coding or writing
 
        :editor
+       meow
        ;;(evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
@@ -191,6 +192,11 @@
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
+
+       :maskray
+       lookup
+       cc
+       python
 
        :config
        ;;literate

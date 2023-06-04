@@ -1,9 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
-(package! meow)
-(package! evil)
-
 (package! pyim-basedict)
 
 (package! markdown-mode)

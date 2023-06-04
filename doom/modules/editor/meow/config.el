@@ -1,4 +1,4 @@
-;;; comp/meow.el -*- lexical-binding: t; -*-
+;;; meow/meow.el -*- lexical-binding: t; -*-
 
 ;; we need evil, but don't be evil
 (use-package! evil)
@@ -6,6 +6,7 @@
 ;; meow save the world!
 (use-package! meow
   :after evil
+  :hook (doom-after-modules-config . meow-global-mode)
   :demand t
   :config
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
@@ -94,6 +95,7 @@
    '("jc" . avy-goto-char-timer)
    '("jn" . evilem-motion-next-line)
    '("jp" . evilem-motion-previous-line)
+   '("jd" . "M-.")
    ;; marks
    '("m" . meow-mark-symbol)
    '("M" . meow-mark-word)
@@ -131,22 +133,4 @@
    '(":" . "M-x")
    '("'" . meow-reverse)
    '("\"" . repeat)
-   '("<escape>" . ignore))
-
-  ;; prog-mode
-  (add-hook 'prog-mode-hook
-            (meow-normal-define-key
-             ;; jump
-             '(";" . +maskray/avy-goto-definitions)
-             '("j;" . +maskray/avy-goto-symbol)
-             '("jr" . +maskray/avy-goto-references)
-             '("jx" . +lookup/references-at-function)
-             '("ji" . lsp-ui-imenu)
-             '("jb" . lsp-ui-peek-jump-backward)
-             '("jf" . lsp-ui-peek-jump-forward)
-             '("ja" . +maskray/workspace-symbol)
-             '("jA" . +maskray/workspace-symbol-alt)
-             '("jF" . +maskray/ffap)))
-
-  ;; meow!
-  (meow-global-mode))
+   '("<escape>" . ignore)))

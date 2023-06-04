@@ -1,4 +1,4 @@
-;;; party/maskray.el -*- lexical-binding: t; -*-
+;;; maskray/lookup/autoload.el -*- lexical-binding: t; -*-
 ;; https://github.com/MaskRay/Config
 
 ;;;###autoload
