@@ -42,7 +42,7 @@
    ;; actions
    '(":" . "M-x"))
 
-  ;; keys for normal
+  ;; keys for normal; TODO: key hud undefined
   (meow-normal-define-key
    ;; expand
    '("0" . meow-expand-0)
@@ -57,18 +57,14 @@
    '("1" . meow-expand-1)
    '("-" . negative-argument)
    ;; move
-   '("h" . meow-back-symbol)
-   '("H" . meow-back-word)
    '("b" . meow-left)
-   '("B" . meow-left-expand)
+   '("B" . meow-left-word)
    '("n" . meow-next)
    '("N" . meow-next-expand)
    '("p" . meow-prev)
    '("P" . meow-prev-expand)
-   '("l" . meow-next-symbol)
-   '("L" . meow-next-word)
    '("f" . meow-right)
-   '("F" . meow-right-expand)
+   '("F" . meow-right-word)
    ;; evil-z
    '("zo" . evil-open-fold)
    '("zO" . evil-open-fold-rec)
@@ -77,15 +73,15 @@
    '("zr" . evil-open-folds)
    '("zm" . evil-close-folds)
    '("z=" . ispell-word)
-   '("z RET" . evil-scroll-line-to-top-first-non-blank)
+   '("z <return>" . evil-scroll-line-to-top-first-non-blank)
    '("zz" . evil-scroll-line-to-center)
    '("z." . evil-scroll-line-to-center-first-non-blank)
    '("zf" . evil-scroll-column-right)
    '("zb" . evil-scroll-column-left)
    '("z/" . evilnc-comment-or-uncomment-line)
    ;; nav
-   '("u" . evil-scroll-up)
-   '("d" . evil-scroll-down)
+   '("v" . evil-scroll-down)
+   '("V" . evil-scroll-up)
    '("," . "C-x C-SPC")
    '(".." . bookmark-jump)
    '(".m" . bookmark-set)
@@ -94,8 +90,9 @@
    '("t" . meow-find)
    '("T" . meow-till)
    '("s" . meow-visit)
-   '("S" . consult-line)
-   '("RET" . meow-search)
+   '("Sb" . meow-left-expand)
+   '("Sf" . meow-right-expand)
+   '("<return>" . meow-search)
    '("jj" . avy-goto-word-0)
    '("jc" . avy-goto-char-timer)
    '("jn" . evilem-motion-next-line)
@@ -110,8 +107,8 @@
    '("}" . meow-end-of-thing)
    '("g" . meow-cancel-selection)
    '("G" . meow-grab)
-   '("v" . meow-line)
-   '("V" . meow-goto-line)
+   '("l" . meow-line)
+   '("L" . meow-goto-line)
    '("o" . meow-block)
    '("O" . meow-to-block)
    ;; edit+marks

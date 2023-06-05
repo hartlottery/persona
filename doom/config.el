@@ -16,10 +16,13 @@
   (setq company-minimum-prefix-length 2
         company-show-quick-access t))
 
+;; consult
+(map! "C-s" #'consult-line)
+
 ;; eglot
 (use-package! eglot)
 
-;; flycheck
+;; maskray/flycheck
 (after! flycheck
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
   (global-flycheck-mode -1))
@@ -67,7 +70,6 @@
 
 (setq lsp-keymap-prefix "M-q")
 (use-package! lsp-mode
-  ;; :load-path "~/Dev/Emacs/lsp-mode"
   :commands lsp
   :hook (nim-mode . lsp)
   :config
@@ -108,24 +110,6 @@
         "j" #'lsp-ui-peek--select-next
         "k" #'lsp-ui-peek--select-prev
         "l" #'lsp-ui-peek--select-next-file))
-
-;; maskray/xref
-(defun +advice/xref-set-jump (&rest args)
-  (require 'lsp-ui)
-  (lsp-ui-peek--with-evil-jumps (evil-set-jump)))
-(advice-add '+lookup/definition :before #'+advice/xref-set-jump)
-(advice-add '+lookup/references :before #'+advice/xref-set-jump)
-
-(after! xref
-  ;; This is required to make `xref-find-references' not give a prompt.
-  ;; `xref-find-references' asks the identifier (which has no text property)
-  ;; and then passes it to `lsp-mode', which requires the text property at
-  ;; point to locate the references.
-  ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=29619
-  (setq xref-prompt-for-identifier '(not xref-find-definitions
-                                         xref-find-definitions-other-window
-                                         xref-find-definitions-other-frame
-                                         xref-find-references)))
 
 ;; which-key
 (setq which-key-idle-delay 0)
@@ -168,6 +152,7 @@ Due to the limitation of LSP, we can only search references _at point_ :("
    '("jr" . +maskray/avy-goto-references)
    '("jx" . +lookup/references-at-function)
    '("js" . +lookup/project-symbol-at-function)
+   '("jD" . +lookup/references)
    '("ji" . lsp-ui-imenu)
    '("jb" . lsp-ui-peek-jump-backward)
    '("jf" . lsp-ui-peek-jump-forward)
