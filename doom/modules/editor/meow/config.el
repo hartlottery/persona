@@ -1,11 +1,23 @@
-;;; meow/meow.el -*- lexical-binding: t; -*-
+;;; editor/meow/config.el -*- lexical-binding: t; -*-
 
 ;; we need evil, but don't be evil
 (use-package! evil)
 
-;; commenter
-(use-package! evil-nerd-commenter
-  :commands (evilnc-comment-or-uncomment-lines))
+;; ace-pinyin
+(defun ace-pinyin-jump-word-wait (arg)
+  "Fork from `ace-pinyin-jump-word', but wait on the first char (like avy)"
+  (interactive "P")
+  (if arg
+      ;; Read input from minibuffer
+      (ace-pinyin--jump-word-1 (read-string "Query word: "))
+    ;; Read input by using timer
+    (message "Query word: ")
+    (let (char string)
+      (while (and (setq char (ace-pinyin--read-wait string))
+                  (not (char-equal char ?)))
+        (setq string (concat string (char-to-string char)))
+        (message (concat "Query word: " string)))
+      (ace-pinyin--jump-word-1 string))))
 
 ;; meow save the world!
 (use-package! meow
@@ -38,11 +50,11 @@
    '("," . "C-x C-SPC")
    ;; god-mode
    '("x" . "C-x")
-   '("C-x C-x" . "H-x") ;; xx to run the original x
+   '("C-x C-x" . "x") ;; xx to run the original x
    ;; actions
    '(":" . "M-x"))
 
-  ;; keys for normal; TODO: key dhq undefined
+  ;; keys for normal; TODO: key hq undefined
   (meow-normal-define-key
    ;; expand
    '("0" . meow-expand-0)
@@ -78,7 +90,7 @@
    '("z." . evil-scroll-line-to-center-first-non-blank)
    '("zf" . evil-scroll-column-right)
    '("zb" . evil-scroll-column-left)
-   '("z/" . evilnc-comment-or-uncomment-line)
+   '("z/" . meow-comment)
    ;; nav
    '("v" . evil-scroll-down)
    '("V" . evil-scroll-up)
@@ -93,10 +105,9 @@
    '("Sb" . meow-left-expand)
    '("Sf" . meow-right-expand)
    '("<return>" . meow-search)
-   '("jj" . avy-goto-word-0)
-   '("jc" . avy-goto-char-timer)
-   '("jn" . evilem-motion-next-line)
-   '("jp" . evilem-motion-previous-line)
+   '("jj" . ace-pinyin-jump-word-wait)
+   '("jn" . avy-goto-word-0-below)
+   '("jp" . avy-goto-word-0-above)
    '("jd" . "M-.")
    ;; marks
    '("m" . meow-mark-symbol)

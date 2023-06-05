@@ -1,15 +1,19 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; face
+;; face; https://github.com/tam5/util-font-patcher, tweaked to ensure both the
+;;   (size, height, ascent, descent) are the same.
+;; https://docs.oracle.com/javase/tutorial/2d/text/fontconcepts.html
 (setq doom-theme 'doom-earl-grey)
-(setq doom-font (font-spec :family "Ubuntu Mono" :size 12.0)
-      doom-variable-pitch-font (font-spec :family "Sarasa Mono SC" :size 12.0)
-      doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12.0))
+(setq doom-font (font-spec :family "Ubuntu Mono 1.25" :size 12.0)
+      doom-variable-pitch-font (font-spec :family "Sarasa Mono SC")
+      doom-unicode-font (font-spec :family "Sarasa Mono SC"))
 (setq all-the-icons-scale-factor 0.8)
 
 ;; avy
 (after! avy
   (setq avy-timeout-seconds 0.2))
+(after! ace-pinyin
+  (ace-pinyin-global-mode -1))
 
 ;; company
 (after! company
@@ -21,95 +25,6 @@
 
 ;; eglot
 (use-package! eglot)
-
-;; maskray/flycheck
-(after! flycheck
-  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
-  (global-flycheck-mode -1))
-
-;; maskray/flymake
-(after! flymake-proc
-  (setq-default flymake-diagnostic-functions nil))
-(defvar flymake-posframe-delay 0.5)
-(defvar flymake-posframe-buffer "*flymake-posframe*")
-(defvar flymake-posframe--last-diag nil)
-(defvar flymake-posframe--timer nil)
-
-(defun flymake-posframe-hide ()
-  (posframe-hide flymake-posframe-buffer))
-
-(defun flymake-posframe-display ()
-  (when flymake-mode
-    (if-let (diag (and flymake-mode
-                       (get-char-property (point) 'flymake-diagnostic)))
-        (unless (and (eq diag flymake-posframe--last-diag)
-                     (frame-visible-p (buffer-local-value 'posframe--frame (get-buffer flymake-posframe-buffer))))
-          (setq flymake-posframe--last-diag diag)
-          (posframe-show
-           flymake-posframe-buffer
-           :string (propertize (concat "? " (flymake--diag-text diag))
-                               'face
-                               (case (flymake--diag-type diag)
-                                 (:error 'error)
-                                 (:warning 'warning)
-                                 (:note 'info)))))
-      (flymake-posframe-hide))))
-
-(defun flymake-posframe-set-timer ()
-  (when flymake-posframe--timer
-    (cancel-timer flymake-posframe--timer))
-  (setq flymake-posframe-timer
-        (run-with-idle-timer flymake-posframe-delay nil #'flymake-posframe-display)))
-
-;; maskray/lsp
-(defvar +my-use-eglot nil) ;; TODO: try eglot?
-(defun +maskray/toggle-eglot ()
-  (interactive)
-  (setq +my-use-eglot (not +my-use-eglot))
-  (message "use: %s" (if +my-use-eglot "eglot" "lsp-mode")))
-
-(setq lsp-keymap-prefix "M-q")
-(use-package! lsp-mode
-  :commands lsp
-  :hook (nim-mode . lsp)
-  :config
-  (setq lsp-lens-enable nil) ;; Very slow
-  (setq lsp-auto-guess-root t lsp-eldoc-prefer-signature-help nil)
-  (setq lsp-semantic-tokens-enable t)
-  (setq lsp-enable-links nil)
-  (setq lsp-prefer-flymake nil)
-  (setq lsp-enable-file-watchers nil)
-  (setq lsp-keep-workspace-alive nil)
-  (add-hook 'evil-insert-state-entry-hook (lambda () (setq-local lsp-hover-enabled nil)))
-  (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t))))
-
-(use-package! lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq
-   lsp-ui-sideline-enable nil
-   lsp-ui-sideline-ignore-duplicate t
-   lsp-ui-doc-header nil
-   lsp-ui-doc-include-signature nil
-   lsp-ui-doc-background (doom-color 'base4)
-   lsp-ui-doc-border (doom-color 'fg)
-
-   lsp-ui-peek-force-fontify nil
-   lsp-ui-peek-expand-function (lambda (xs) (mapcar #'car xs)))
-
-  (custom-set-faces
-   '(ccls-sem-global-variable-face ((t (:underline t :weight extra-bold))))
-   '(lsp-face-highlight-read ((t (:background "sea green"))))
-   '(lsp-face-highlight-write ((t (:background "brown4"))))
-   '(lsp-ui-sideline-current-symbol ((t (:foreground "grey38" :box nil))))
-   '(lsp-ui-sideline-symbol ((t (:foreground "grey30" :box nil)))))
-
-  (map! :after lsp-ui-peek
-        :map lsp-ui-peek-mode-map
-        "h" #'lsp-ui-peek--select-prev-file
-        "j" #'lsp-ui-peek--select-next
-        "k" #'lsp-ui-peek--select-prev
-        "l" #'lsp-ui-peek--select-next-file))
 
 ;; which-key
 (setq which-key-idle-delay 0)
@@ -178,7 +93,7 @@ Due to the limitation of LSP, we can only search references _at point_ :("
   (pyim-default-scheme 'zhinengabc-shuangpin)
   (defun pyim-probe-meow-mode ()
     (not (eq meow--current-state 'insert)))
-  (setq pyim-page-length 9
+  (setq pyim-page-length 5
         pyim-cloudim 'baidu
         pyim-punctuation-dict
                 '(("'" "‘" "’")
@@ -207,6 +122,20 @@ Due to the limitation of LSP, we can only search references _at point_ :("
                   pyim-probe-punctuation-after-punctuation)
         pyim-process-run-delay 1)
 
+  ;; add a duplicate word in 2nd place, as placeholder for cloudim
+  (defun pyim-candidates-placeholder (result)
+    (when (car result)
+      `(,(car result)
+        ,"@"
+        ,@(cdr result))))
+  (advice-add 'pyim-candidates-create :filter-return #'pyim-candidates-placeholder)
+  ;; then removes it when cloud returns; TODO: the placeholder may splash
+  (defun pyim-remove-placeholder (args)
+    (let ((old (nth 1 args)))
+      (setf (nth 1 args) (delete "@" old)))
+    args)
+  (advice-add 'pyim-process--merge-candidates :filter-args #'pyim-remove-placeholder)
+
   ;; load dict from ~/.eim/*.pyim; redguardtoo/emacs.d/lisp/init-chinese.el
   (let* ((files (and (file-exists-p "~/.eim")
                      (directory-files-recursively "~/.eim" "\.pyim$")))
@@ -225,7 +154,17 @@ Due to the limitation of LSP, we can only search references _at point_ :("
     (unless disable-basedict (pyim-basedict-enable)))
   (map! :map pyim-mode-map
         "." #'pyim-page-next-page
-        "," #'pyim-page-previous-page))
+        "," #'pyim-page-previous-page)
+  (setq default-input-method "pyim"))
+
+;; ace-window; TODO: fix warn
+(after! (:and ace-window posframe)
+  (ace-window-posframe-mode)
+  (setq aw-posframe-position-handler #'posframe-poshandler-window-bottom-left-corner
+        aw-background nil)
+  (custom-set-faces
+   '(aw-leading-char-face ((t (:background "#424242" :foreground "#ECEFF1" :weight bold
+                               :width ultra-expanded :height 4.0))))))
 
 ;; maskray/company
 (map! :after company :map company-active-map
