@@ -42,7 +42,7 @@
    ;; actions
    '(":" . "M-x"))
 
-  ;; keys for normal; TODO: key hud undefined
+  ;; keys for normal; TODO: key dhq undefined
   (meow-normal-define-key
    ;; expand
    '("0" . meow-expand-0)
@@ -58,13 +58,13 @@
    '("-" . negative-argument)
    ;; move
    '("b" . meow-left)
-   '("B" . meow-left-word)
+   '("B" . meow-back-word)
    '("n" . meow-next)
    '("N" . meow-next-expand)
    '("p" . meow-prev)
    '("P" . meow-prev-expand)
    '("f" . meow-right)
-   '("F" . meow-right-word)
+   '("F" . meow-next-word)
    ;; evil-z
    '("zo" . evil-open-fold)
    '("zO" . evil-open-fold-rec)
@@ -125,7 +125,7 @@
    '("I" . meow-open-above)
    '("/" . meow-undo)
    '("?" . undo-redo)
-   '("q" . meow-pop-selection)
+   '("u" . meow-pop-selection)
    '("<" . evil-shift-left)
    '(">" . evil-shift-right)
    ;; god-mode

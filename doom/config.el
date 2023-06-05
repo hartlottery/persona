@@ -144,6 +144,10 @@ Due to the limitation of LSP, we can only search references _at point_ :("
                (doom-project-root default-directory)))))
     (+vertico/project-search nil (which-function) dir))
 
+  (defun ccls-callee-hierarchy ()
+    (interactive)
+    (ccls-call-hierarchy t))
+
   ;; bind; TODO: add-hook prog-mode-hook?
   (meow-normal-define-key
    ;; jump
@@ -153,12 +157,17 @@ Due to the limitation of LSP, we can only search references _at point_ :("
    '("jx" . +lookup/references-at-function)
    '("js" . +lookup/project-symbol-at-function)
    '("jD" . +lookup/references)
-   '("ji" . lsp-ui-imenu)
    '("jb" . lsp-ui-peek-jump-backward)
    '("jf" . lsp-ui-peek-jump-forward)
    '("ja" . +maskray/workspace-symbol)
    '("jA" . +maskray/workspace-symbol-alt)
-   '("jF" . +maskray/ffap)))
+   '("jF" . +maskray/ffap)
+   ;; display; TODO: popups
+   '("di" . lsp-ui-imenu)
+   '("dc" . ccls/caller)
+   '("dC" . ccls/callee)
+   '("de" . ccls-call-hierarchy)
+   '("dE" . ccls-callee-hierarchy)))
 
 ;; utf-8
 (set-language-environment "UTF-8")
@@ -217,6 +226,16 @@ Due to the limitation of LSP, we can only search references _at point_ :("
   (map! :map pyim-mode-map
         "." #'pyim-page-next-page
         "," #'pyim-page-previous-page))
+
+;; maskray/company
+(map! :after company :map company-active-map
+      "C-v" #'company-next-page
+      "M-v" #'company-previous-page
+      "C-i" #'company-complete-selection
+      [tab] #'company-complete-selection
+      "RET" nil
+      [return] nil
+      "SPC" nil)
 
 ;; org-download
 (use-package! org-download
