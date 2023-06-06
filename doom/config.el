@@ -9,6 +9,23 @@
       doom-unicode-font (font-spec :family "Sarasa Mono SC"))
 (setq all-the-icons-scale-factor 0.8)
 
+;; annotate, C-c C-a
+(use-package! annotate)
+
+;; maskray/frog-jump-buffer
+(use-package! frog-jump-buffer
+	      :config
+	      (dolist (regexp '("^\\*"))
+		(push regexp frog-jump-buffer-ignore-buffers))
+	      (map! :leader "SPC" #'frog-jump-buffer))
+
+;; maskray/tldr
+(use-package! tldr
+	      :commands (tldr)
+	      :config
+	      (setq tldr-directory-path (concat doom-etc-dir "tldr/"))
+	      (set-popup-rule! "^\\*tldr\\*" :side 'right :select t :quit t))
+
 ;; avy
 (after! avy
   (setq avy-timeout-seconds 0.2))

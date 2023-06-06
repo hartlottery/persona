@@ -13,3 +13,9 @@
 
 (package! spinner)
 (package! eglot)
+
+(package! annotate)
+
+(package! frog-jump-buffer)
+
+(package! tldr)
