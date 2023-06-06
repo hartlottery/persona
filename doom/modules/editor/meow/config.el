@@ -2,6 +2,16 @@
 
 ;; we need evil, but don't be evil
 (use-package! evil)
+(defun evil-ignore ()) ;; TODO: loop, or better way?
+(advice-add 'evil-normal-state :override #'evil-ignore)
+(advice-add 'evil-insert-state :override #'evil-ignore)
+(advice-add 'evil-visual-state :override #'evil-ignore)
+(advice-add 'evil-operator-state :override #'evil-ignore)
+(advice-add 'evil-replace-state :override #'evil-ignore)
+(advice-add 'evil-motion-state :override #'evil-ignore)
+(advice-add 'evil-emacs-state :override #'evil-ignore)
+(advice-add 'evil-mode :override #'evil-ignore)
+(advice-add 'evil-local-mode :override #'evil-ignore)
 
 ;; ace-pinyin
 (use-package! ace-pinyin)
@@ -110,8 +120,7 @@
    '("s" . meow-visit)
    '("Sb" . meow-left-expand)
    '("Sf" . meow-right-expand)
-   '("\\ <return>" . "RET")
-   '("<return>" . meow-search)
+   '("'" . meow-search)
    '("jj" . ace-pinyin-jump-word-wait)
    '("jn" . avy-goto-word-0-below)
    '("jp" . avy-goto-word-0-above)
@@ -151,6 +160,6 @@
    '("c" . "C-c")
    ;; actions
    '(":" . "M-x")
-   '("'" . meow-reverse)
-   '("\"" . repeat)
+   '("\"" . meow-reverse)
+   '("=" . repeat)
    '("<escape>" . ignore)))
