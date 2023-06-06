@@ -4,6 +4,12 @@
 (use-package! evil)
 
 ;; ace-pinyin
+(use-package! ace-pinyin)
+(setq ace-pinyin--jump-word-timeout 0.3)
+(defun ace-pinyin--read-wait (string)
+  (if string
+      (read-char nil nil ace-pinyin--jump-word-timeout)
+    (read-char nil nil nil)))
 (defun ace-pinyin-jump-word-wait (arg)
   "Fork from `ace-pinyin-jump-word', but wait on the first char (like avy)"
   (interactive "P")
@@ -49,8 +55,8 @@
    ;; nav
    '("," . "C-x C-SPC")
    ;; god-mode
+   '("\\ x" . "H-x")
    '("x" . "C-x")
-   '("C-x C-x" . "x") ;; xx to run the original x
    ;; actions
    '(":" . "M-x"))
 
@@ -104,6 +110,7 @@
    '("s" . meow-visit)
    '("Sb" . meow-left-expand)
    '("Sf" . meow-right-expand)
+   '("\\ <return>" . "RET")
    '("<return>" . meow-search)
    '("jj" . ace-pinyin-jump-word-wait)
    '("jn" . avy-goto-word-0-below)
