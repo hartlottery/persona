@@ -3,7 +3,10 @@
 ;; face; https://github.com/tam5/util-font-patcher, tweaked to ensure both the
 ;;   (size, height, ascent, descent) are the same.
 ;; https://docs.oracle.com/javase/tutorial/2d/text/fontconcepts.html
-(setq doom-theme 'doom-earl-grey)
+(use-package! modus-themes
+  :config
+  (setq doom-theme 'modus-operandi))
+
 (setq doom-font (font-spec :family "Ubuntu Mono 1.25" :size 12.0)
       doom-variable-pitch-font (font-spec :family "Sarasa Mono SC")
       doom-unicode-font (font-spec :family "Sarasa Mono SC"))
@@ -53,29 +56,30 @@
   (which-function-mode 1))
 
 ;; redguardtoo/modeline
-(defconst ml-default-color (cons (face-background 'mode-line)
-                                 (face-foreground 'mode-line)))
+(after! doom-modeline
+  (defconst ml-default-color (cons (face-background 'doom-modeline-highlight)
+                                   (face-foreground 'doom-modeline-highlight)))
 
-(defun +redguardtoo/show-meow-state ()
-  "Change modeline color to notify user meow's current state"
-  (let ((color (cond
-                ;; https://m2.material.io/design/color/the-color-system.html
-                ((minibufferp)
-                 ml-default-color)
-                ;; ((and current-input-method (meow-insert-mode-p))
-                ;;  '("#a7ffeb" . nil))
-                ((meow-insert-mode-p)
-                 '("#ffe57f" . nil))
-                ((meow-motion-mode-p)
-                 '("#ccff90" . nil))
-                ((buffer-modified-p)
-                 '("#ff8a80" . nil))
-                (t
-                 ml-default-color))))
-    (set-face-background 'mode-line (car color))
-    (when (cdr color)
-      (set-face-foreground 'mode-line (cdr color)))))
-(add-hook 'post-command-hook #'+redguardtoo/show-meow-state)
+  (defun +redguardtoo/show-meow-state ()
+    "Change modeline color to notify user meow's current state"
+    (let ((color (cond
+                  ;; https://m2.material.io/design/color/the-color-system.html
+                  ((minibufferp)
+                   ml-default-color)
+                  ;; ((and current-input-method (meow-insert-mode-p))
+                  ;;  '("#a7ffeb" . nil))
+                  ((meow-insert-mode-p)
+                   '("#ffe57f" . nil))
+                  ((meow-motion-mode-p)
+                   '("#ccff90" . nil))
+                  ((buffer-modified-p)
+                   '("#ff8a80" . nil))
+                  (t
+                   ml-default-color))))
+      (set-face-background 'mode-line (car color))
+      (when (cdr color)
+        (set-face-foreground 'mode-line (cdr color)))))
+  (add-hook 'post-command-hook #'+redguardtoo/show-meow-state))
 
 ;; lookup
 (when (modulep! :tools lookup)
@@ -136,7 +140,7 @@ Due to the limitation of LSP, we can only search references _at point_ :("
   (pyim-default-scheme 'zhinengabc-shuangpin)
   (defun pyim-probe-meow-mode ()
     (not (eq meow--current-state 'insert)))
-  (setq pyim-page-length 5
+  (setq pyim-page-length 9
         pyim-cloudim 'baidu
         pyim-punctuation-dict
                 '(("'" "‘" "’")
@@ -185,7 +189,7 @@ Due to the limitation of LSP, we can only search references _at point_ :("
                       (old (nth 1 args)))
                   (when (> (length new) 0)
                     ;; TODO: remove duplicates? the list `new' is expected to be small
-                    (if (member (car new) old)
+                    (if (member (car new) (seq-take old pyim-page-length))
                         (setf (nth 0 args) '())
                       (setf (nth 1 args) (delete "…" old)))))
                 args))
