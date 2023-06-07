@@ -14,17 +14,17 @@
 
 ;; maskray/frog-jump-buffer
 (use-package! frog-jump-buffer
-	      :config
-	      (dolist (regexp '("^\\*"))
-		(push regexp frog-jump-buffer-ignore-buffers))
-	      (map! :leader "SPC" #'frog-jump-buffer))
+  :config
+  (dolist (regexp '("^\\*"))
+    (push regexp frog-jump-buffer-ignore-buffers))
+  (map! :leader "," #'frog-jump-buffer))
 
 ;; maskray/tldr
 (use-package! tldr
-	      :commands (tldr)
-	      :config
-	      (setq tldr-directory-path (concat doom-etc-dir "tldr/"))
-	      (set-popup-rule! "^\\*tldr\\*" :side 'right :select t :quit t))
+  :commands (tldr)
+  :config
+  (setq tldr-directory-path (concat doom-data-dir "tldr/"))
+  (set-popup-rule! "^\\*tldr\\*" :side 'right :select t :quit t))
 
 ;; avy
 (after! avy
@@ -140,18 +140,28 @@ Due to the limitation of LSP, we can only search references _at point_ :("
         pyim-process-run-delay 1)
 
   ;; add a duplicate word in 2nd place, as placeholder for cloudim
-  (defun pyim-candidates-placeholder (result)
-    (when (car result)
-      `(,(car result)
-        ,"@"
-        ,@(cdr result))))
-  (advice-add 'pyim-candidates-create :filter-return #'pyim-candidates-placeholder)
+  (advice-add 'pyim-candidates-create :filter-return
+              (lambda (result)
+                (when (car result)
+                  `(,(car result)
+                    ,"…"
+                    ,@(cdr result)))))
+  ;; restrict only one cloud result
+  (advice-add 'pyim-cloudim--parse-baidu-buffer-string :filter-return
+              (lambda (result)
+                (if (> (length result) 0)
+                    (list (car result))
+                  result)))
   ;; then removes it when cloud returns; TODO: the placeholder may splash
-  (defun pyim-remove-placeholder (args)
-    (let ((old (nth 1 args)))
-      (setf (nth 1 args) (delete "@" old)))
-    args)
-  (advice-add 'pyim-process--merge-candidates :filter-args #'pyim-remove-placeholder)
+  (advice-add 'pyim-process--merge-candidates :filter-args
+              (lambda (args)
+                (let ((new (nth 0 args))
+                      (old (nth 1 args)))
+                  ;; TODO: remove duplicates? the list `new' is expected to be small
+                  (if (member (car new) old)
+                      (setf (nth 0 args) '())
+                    (setf (nth 1 args) (delete "…" old))))
+                args))
 
   ;; load dict from ~/.eim/*.pyim; redguardtoo/emacs.d/lisp/init-chinese.el
   (let* ((files (and (file-exists-p "~/.eim")
