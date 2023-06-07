@@ -183,10 +183,11 @@ Due to the limitation of LSP, we can only search references _at point_ :("
               (lambda (args)
                 (let ((new (nth 0 args))
                       (old (nth 1 args)))
-                  ;; TODO: remove duplicates? the list `new' is expected to be small
-                  (if (member (car new) old)
-                      (setf (nth 0 args) '())
-                    (setf (nth 1 args) (delete "…" old))))
+                  (when (> (length new) 0)
+                    ;; TODO: remove duplicates? the list `new' is expected to be small
+                    (if (member (car new) old)
+                        (setf (nth 0 args) '())
+                      (setf (nth 1 args) (delete "…" old)))))
                 args))
 
   ;; load dict from ~/.eim/*.pyim; redguardtoo/emacs.d/lisp/init-chinese.el
