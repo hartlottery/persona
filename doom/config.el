@@ -44,12 +44,38 @@
 (use-package! eglot)
 
 ;; which-key
-(setq which-key-idle-delay 0)
+(setq which-key-idle-delay 0
+      which-key-popup-type 'minibuffer)
 
 ;; which-func
 (use-package! which-func
   :config
   (which-function-mode 1))
+
+;; redguardtoo/modeline
+(defconst ml-default-color (cons (face-background 'mode-line)
+                                 (face-foreground 'mode-line)))
+
+(defun +redguardtoo/show-meow-state ()
+  "Change modeline color to notify user meow's current state"
+  (let ((color (cond
+                ;; https://m2.material.io/design/color/the-color-system.html
+                ((minibufferp)
+                 ml-default-color)
+                ;; ((and current-input-method (meow-insert-mode-p))
+                ;;  '("#a7ffeb" . nil))
+                ((meow-insert-mode-p)
+                 '("#ffe57f" . nil))
+                ((meow-motion-mode-p)
+                 '("#ccff90" . nil))
+                ((buffer-modified-p)
+                 '("#ff8a80" . nil))
+                (t
+                 ml-default-color))))
+    (set-face-background 'mode-line (car color))
+    (when (cdr color)
+      (set-face-foreground 'mode-line (cdr color)))))
+(add-hook 'post-command-hook #'+redguardtoo/show-meow-state)
 
 ;; lookup
 (when (modulep! :tools lookup)
