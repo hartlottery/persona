@@ -35,6 +35,11 @@
         (message (concat "Query word: " string)))
       (ace-pinyin--jump-word-1 string))))
 
+;; zsh-term
+(defun open-zsh-term ()
+  (interactive)
+  (ansi-term "/bin/zsh"))
+
 ;; meow save the world!
 (use-package! meow
   :after evil
@@ -68,7 +73,8 @@
    '("\\ x" . "H-x")
    '("x" . "C-x")
    ;; actions
-   '(":" . "M-x"))
+   '(":" . "M-x")
+   '("!" . "M-!"))
 
   ;; keys for normal; TODO: key hq undefined
   (meow-normal-define-key
@@ -102,6 +108,7 @@
    '("zm" . evil-close-folds)
    '("z=" . ispell-word)
    '("z <return>" . evil-scroll-line-to-top-first-non-blank)
+   '("z TAB" . evil-indent)
    '("zz" . evil-scroll-line-to-center-first-non-blank)
    '("z." . evil-scroll-line-to-bottom-first-non-blank)
    '("zf" . evil-scroll-column-right)
@@ -110,24 +117,43 @@
    ;; nav
    '("v" . evil-scroll-down)
    '("V" . evil-scroll-up)
-   '("," . "C-x C-SPC")
-   '(".." . bookmark-jump)
-   '(".m" . bookmark-set)
-   '(".d" . bookmark-delete)
+   '("," . better-jumper-jump-backward)
+   '("." . better-jumper-jump-forward)
+   ;; window (SPC w)
+   '("0" . winum-select-window-0-or-10)
+   '("1" . winum-select-window-1)
+   '("2" . winum-select-window-2)
+   '("3" . winum-select-window-3)
+   '("4" . winum-select-window-4)
+   '("5" . winum-select-window-5)
+   '("6" . winum-select-window-6)
+   '("7" . winum-select-window-7)
+   '("8" . winum-select-window-8)
+   '("9" . winum-select-window-9)
+   '("h /" . winner-undo)
+   '("h ?" . winner-redo)
+   '("h b" . evil-window-left)
+   '("h n" . evil-window-bottom)
+   '("h p" . evil-window-up)
+   '("h f" . evil-window-right)
+   '("h x" . "C-x 4")
+   '("h <return>" . open-zsh-term)
+   '("`" . "C-`")
    ;; jumps
    '("t" . meow-find)
    '("T" . meow-till)
    '("s" . meow-visit)
    '("Sb" . meow-left-expand)
    '("Sf" . meow-right-expand)
-   '("'" . meow-search)
+   '("\\ <return>" . "RET")
+   '("<return>" . meow-search)
    '("jj" . ace-pinyin-jump-word-wait)
    '("jn" . avy-goto-word-0-below)
    '("jp" . avy-goto-word-0-above)
    '("jd" . "M-.")
    ;; marks
-   '("m" . meow-mark-symbol)
-   '("M" . meow-mark-word)
+   '("m" . meow-mark-word)
+   '("M" . meow-mark-symbol)
    '("[" . meow-inner-of-thing)
    '("]" . meow-bounds-of-thing)
    '("{" . meow-beginning-of-thing)
@@ -160,6 +186,16 @@
    '("c" . "C-c")
    ;; actions
    '(":" . "M-x")
-   '("\"" . meow-reverse)
+   '("!" . "M-!")
+   '("'" . meow-reverse)
    '("=" . repeat)
-   '("<escape>" . ignore)))
+   '("<escape>" . ignore))
+
+  ;; jump-point; TODO: meow-switch-state-hook?
+  (add-hook 'meow-insert-enter-hook 'better-jumper-set-jump)
+  (add-hook 'meow-insert-exit-hook 'better-jumper-set-jump)
+
+  ;; evil-collection/modes/term/evil-collection-term.el
+  (add-hook 'term-mode-hook (lambda ()
+                              (add-hook 'meow-insert-enter-hook 'term-char-mode)
+                              (add-hook 'meow-insert-exit-hook 'term-line-mode))))
