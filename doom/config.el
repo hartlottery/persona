@@ -261,7 +261,16 @@ Due to the limitation of LSP, we can only search references _at point_ :("
 (use-package! mind-wave
   :init
   (when (file-exists-p ".mind-wave-config.el")
-    (load! ".mind-wave-config.el")))
+    (load! ".mind-wave-config.el"))
+  :config
+  (meow-normal-define-key
+   ;; questions
+   '("q c" . mind-wave-generate-code)
+   '("q /" . mind-wave-comment-code)
+   '("q e" . mind-wave-explain-code)
+   '("q E" . mind-wave-explain-point)
+   '("q p" . mind-wave-proofreading-doc)
+   '("q a" . mind-wave-adjust-text)))
 
 ;; proxy with user/passwd
 (let ((proxy (getenv "http_proxy"))
