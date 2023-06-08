@@ -47,8 +47,7 @@
 (use-package! eglot)
 
 ;; which-key
-(setq which-key-idle-delay 0
-      which-key-popup-type 'minibuffer)
+(setq which-key-popup-type 'minibuffer)
 
 ;; which-func
 (use-package! which-func
@@ -72,8 +71,10 @@
                    '("#ffe57f" . nil))
                   ((meow-motion-mode-p)
                    '("#ccff90" . nil))
-                  ((buffer-modified-p)
+                  ((and (buffer-modified-p) (not (eq (substring (buffer-name) 0 1) "*")))
                    '("#ff8a80" . nil))
+                  ((meow-normal-mode-p)
+                   '("#e3f2fd" . nil))
                   (t
                    ml-default-color))))
       (set-face-background 'mode-line (car color))

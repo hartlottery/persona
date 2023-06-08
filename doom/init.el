@@ -200,6 +200,9 @@
        cc
        python
 
+       :redguardtoo
+       windows
+
        :config
        ;;literate
        (default +bindings +smartparens))

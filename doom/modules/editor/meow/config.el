@@ -38,7 +38,7 @@
 ;; zsh-term
 (defun open-zsh-term ()
   (interactive)
-  (ansi-term "/bin/zsh"))
+  (ansi-term "zsh"))
 
 ;; meow save the world!
 (use-package! meow
@@ -74,7 +74,8 @@
    '("x" . "C-x")
    ;; actions
    '(":" . "M-x")
-   '("!" . "M-!"))
+   '("!" . "M-!")
+   '("<escape>" . ignore))
 
   ;; keys for normal; TODO: key hq undefined
   (meow-normal-define-key
@@ -120,16 +121,16 @@
    '("," . better-jumper-jump-backward)
    '("." . better-jumper-jump-forward)
    ;; window (SPC w)
-   '("0" . winum-select-window-0-or-10)
-   '("1" . winum-select-window-1)
-   '("2" . winum-select-window-2)
-   '("3" . winum-select-window-3)
-   '("4" . winum-select-window-4)
-   '("5" . winum-select-window-5)
-   '("6" . winum-select-window-6)
-   '("7" . winum-select-window-7)
-   '("8" . winum-select-window-8)
-   '("9" . winum-select-window-9)
+   '("h 0" . winum-select-window-0-or-10)
+   '("h 1" . winum-select-window-1)
+   '("h 2" . winum-select-window-2)
+   '("h 3" . winum-select-window-3)
+   '("h 4" . winum-select-window-4)
+   '("h 5" . winum-select-window-5)
+   '("h 6" . winum-select-window-6)
+   '("h 7" . winum-select-window-7)
+   '("h 8" . winum-select-window-8)
+   '("h 9" . winum-select-window-9)
    '("h /" . winner-undo)
    '("h ?" . winner-redo)
    '("h b" . evil-window-left)
@@ -192,10 +193,13 @@
    '("<escape>" . ignore))
 
   ;; jump-point; TODO: meow-switch-state-hook?
-  (add-hook 'meow-insert-enter-hook 'better-jumper-set-jump)
   (add-hook 'meow-insert-exit-hook 'better-jumper-set-jump)
 
   ;; evil-collection/modes/term/evil-collection-term.el
-  (add-hook 'term-mode-hook (lambda ()
-                              (add-hook 'meow-insert-enter-hook 'term-char-mode)
-                              (add-hook 'meow-insert-exit-hook 'term-line-mode))))
+  (add-to-list 'meow-mode-state-list '(term-mode . insert))
+  (defun meow-term-sync ()
+    (add-hook 'meow-insert-enter-hook (lambda ()
+                                        (when (get-buffer-process (current-buffer))
+                                          (term-char-mode))))
+    (add-hook 'meow-insert-exit-hook 'term-line-mode))
+  (add-hook 'term-mode-hook 'meow-term-sync))
