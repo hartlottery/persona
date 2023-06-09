@@ -13,6 +13,14 @@
 (advice-add 'evil-mode :override #'evil-ignore)
 (advice-add 'evil-local-mode :override #'evil-ignore)
 
+;; avy/avy.el
+(defun avy-goto-word-0-near (arg)
+  (interactive "P")
+  (avy-goto-word-0 arg
+                   (line-beginning-position -1)
+                   (line-beginning-position 4)))
+(map! "C-t" #'avy-goto-word-0-near)
+
 ;; ace-pinyin
 (use-package! ace-pinyin)
 (setq ace-pinyin--jump-word-timeout 0.3)
@@ -63,22 +71,51 @@
   (map! "C-x C-0" nil)
   (map! "C-x C-o" nil)
 
+  ;; keys for motion+normal
+  (let ((meow-common-keys
+         (list
+          ;; move
+          '("b" . meow-left)
+          '("n" . meow-next)
+          '("p" . meow-prev)
+          '("f" . meow-right)
+          ;; window (SPC w)
+          '("h 0" . winum-select-window-0-or-10)
+          '("h 1" . winum-select-window-1)
+          '("h 2" . winum-select-window-2)
+          '("h 3" . winum-select-window-3)
+          '("h 4" . winum-select-window-4)
+          '("h 5" . winum-select-window-5)
+          '("h 6" . winum-select-window-6)
+          '("h 7" . winum-select-window-7)
+          '("h 8" . winum-select-window-8)
+          '("h 9" . winum-select-window-9)
+          '("h /" . winner-undo)
+          '("h ?" . winner-redo)
+          '("h b" . evil-window-left)
+          '("h n" . evil-window-bottom)
+          '("h p" . evil-window-up)
+          '("h f" . evil-window-right)
+          '("h x" . "C-x 4")
+          '("h <return>" . open-zsh-term-other-window)
+          ;; nav
+          '("," . better-jumper-jump-backward)
+          '("." . better-jumper-jump-forward)
+          '("`" . "C-`")
+          ;; god-mode
+          '("x" . "C-x")
+          ;; actions
+          '(":" . "M-x")
+          '("!" . "M-!")
+          '("<escape>" . ignore))))
+    (apply #'meow-motion-overwrite-define-key meow-common-keys)
+    (apply #'meow-normal-define-key meow-common-keys))
+
   ;; keys for motion
   (meow-motion-overwrite-define-key
-   ;; move
-   '("b" . meow-left)
-   '("n" . meow-next)
-   '("p" . meow-prev)
-   '("f" . meow-right)
-   ;; nav
-   '("," . "C-x C-SPC")
-   ;; god-mode
+   ;; escape
    '("\\ x" . "H-x")
-   '("x" . "C-x")
-   ;; actions
-   '(":" . "M-x")
-   '("!" . "M-!")
-   '("<escape>" . ignore))
+   '("\\ h" . "H-h"))
 
   ;; keys for normal; TODO: key hq undefined
   (meow-normal-define-key
@@ -95,13 +132,9 @@
    '("1" . meow-expand-1)
    '("-" . negative-argument)
    ;; move
-   '("b" . meow-left)
    '("B" . meow-back-word)
-   '("n" . meow-next)
    '("N" . meow-next-expand)
-   '("p" . meow-prev)
    '("P" . meow-prev-expand)
-   '("f" . meow-right)
    '("F" . meow-next-word)
    ;; evil-z
    '("zo" . evil-open-fold)
@@ -121,28 +154,6 @@
    ;; nav
    '("v" . evil-scroll-down)
    '("V" . evil-scroll-up)
-   '("," . better-jumper-jump-backward)
-   '("." . better-jumper-jump-forward)
-   ;; window (SPC w)
-   '("h 0" . winum-select-window-0-or-10)
-   '("h 1" . winum-select-window-1)
-   '("h 2" . winum-select-window-2)
-   '("h 3" . winum-select-window-3)
-   '("h 4" . winum-select-window-4)
-   '("h 5" . winum-select-window-5)
-   '("h 6" . winum-select-window-6)
-   '("h 7" . winum-select-window-7)
-   '("h 8" . winum-select-window-8)
-   '("h 9" . winum-select-window-9)
-   '("h /" . winner-undo)
-   '("h ?" . winner-redo)
-   '("h b" . evil-window-left)
-   '("h n" . evil-window-bottom)
-   '("h p" . evil-window-up)
-   '("h f" . evil-window-right)
-   '("h x" . "C-x 4")
-   '("h <return>" . open-zsh-term-other-window)
-   '("`" . "C-`")
    ;; jumps
    '("t" . meow-find)
    '("T" . meow-till)
@@ -186,14 +197,10 @@
    '("<" . evil-shift-left)
    '(">" . evil-shift-right)
    ;; god-mode
-   '("x" . "C-x")
    '("c" . "C-c")
    ;; actions
-   '(":" . "M-x")
-   '("!" . "M-!")
    '("'" . meow-reverse)
-   '("=" . repeat)
-   '("<escape>" . ignore))
+   '("=" . repeat))
 
   ;; jump-point; TODO: meow-switch-state-hook?
   (add-hook 'meow-insert-exit-hook 'better-jumper-set-jump)
