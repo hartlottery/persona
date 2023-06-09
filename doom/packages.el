@@ -8,7 +8,7 @@
 (package! markdown-mode)
 (package! mind-wave
   :recipe (:host github
-           :repo "manateelazycat/mind-wave"
+           :repo "hartlottery/mind-wave"
            :files ("*.el" "*.py")))
 
 (package! org-download)

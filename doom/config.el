@@ -71,7 +71,7 @@
                    '("#ffe57f" . nil))
                   ((meow-motion-mode-p)
                    '("#ccff90" . nil))
-                  ((and (buffer-modified-p) (not (eq (substring (buffer-name) 0 1) "*")))
+                  ((and (buffer-modified-p) (not (eq (substring (buffer-name) 0 1) "*"))) ;; TODO: ansi-term
                    '("#ff8a80" . nil))
                   ((meow-normal-mode-p)
                    '("#e3f2fd" . nil))
@@ -260,8 +260,10 @@ Due to the limitation of LSP, we can only search references _at point_ :("
 ;; mind-wave, with `setq mind-wave-api-base' and `setq mind-wave-api-key-path'
 (use-package! mind-wave
   :init
-  (when (file-exists-p ".mind-wave-config.el")
-    (load! ".mind-wave-config.el"))
+  (let ((config (concat doom-user-dir ".mind-wave-config.el")))
+    (when (file-exists-p config)
+      (load! config)))
+
   :config
   (meow-normal-define-key
    ;; questions
