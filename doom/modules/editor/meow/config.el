@@ -36,9 +36,12 @@
       (ace-pinyin--jump-word-1 string))))
 
 ;; zsh-term
-(defun open-zsh-term ()
+(defun open-zsh-term-other-window ()
   (interactive)
-  (ansi-term "zsh"))
+  ;; FIXME: dirty tricks...
+  (advice-add 'switch-to-buffer :override 'switch-to-buffer-other-window)
+  (ansi-term "zsh")
+  (advice-remove 'switch-to-buffer 'switch-to-buffer-other-window))
 
 ;; meow save the world!
 (use-package! meow
@@ -138,7 +141,7 @@
    '("h p" . evil-window-up)
    '("h f" . evil-window-right)
    '("h x" . "C-x 4")
-   '("h <return>" . open-zsh-term)
+   '("h <return>" . open-zsh-term-other-window)
    '("`" . "C-`")
    ;; jumps
    '("t" . meow-find)
