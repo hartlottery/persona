@@ -1,0 +1,1 @@
+../oh-my-fish/lib/git/git_is_worktree.fish

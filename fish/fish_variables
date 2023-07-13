@@ -5,7 +5,8 @@ SETUVAR _fisher_oh_2D_my_2D_fish_2F_plugin_2D_bang_2D_bang_files:\x7e/\x2econfig
 SETUVAR _fisher_oh_2D_my_2D_fish_2F_plugin_2D_foreign_2D_env_files:\x7e/\x2econfig/fish/functions/fenv\x2efish\x1e\x7e/\x2econfig/fish/functions/fenv\x2emain\x2efish
 SETUVAR _fisher_oh_2D_my_2D_fish_2F_plugin_2D_jump_files:\x7e/\x2econfig/fish/functions/jump\x2efish\x1e\x7e/\x2econfig/fish/functions/mark\x2efish\x1e\x7e/\x2econfig/fish/functions/marks\x2efish\x1e\x7e/\x2econfig/fish/functions/unmark\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/jump\x2efish\x1e\x7e/\x2econfig/fish/completions/jump\x2efish
 SETUVAR _fisher_oh_2D_my_2D_fish_2F_plugin_2D_z_files:\x7e/\x2econfig/fish/functions/z\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/z\x2efish\x1e\x7e/\x2econfig/fish/completions/z\x2efish
-SETUVAR _fisher_plugins:oh\x2dmy\x2dfish/plugin\x2dbang\x2dbang\x1eoh\x2dmy\x2dfish/plugin\x2dz\x1eoh\x2dmy\x2dfish/plugin\x2dforeign\x2denv\x1eoh\x2dmy\x2dfish/plugin\x2djump
+SETUVAR _fisher_oh_2D_my_2D_fish_2F_theme_2D_default_files:\x7e/\x2econfig/fish/functions/fish_prompt\x2efish\x1e\x7e/\x2econfig/fish/functions/fish_right_prompt\x2efish
+SETUVAR _fisher_plugins:oh\x2dmy\x2dfish/plugin\x2dbang\x2dbang\x1eoh\x2dmy\x2dfish/plugin\x2dz\x1eoh\x2dmy\x2dfish/plugin\x2dforeign\x2denv\x1eoh\x2dmy\x2dfish/plugin\x2djump\x1eoh\x2dmy\x2dfish/theme\x2ddefault
 SETUVAR _fisher_upgraded_to_4_4:\x1d
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
